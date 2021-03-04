@@ -157,7 +157,7 @@ const commitToMd = (url, commit, args) => {
     return stripIndent(`\
       - ${subtitle}${commit.message}. ${commit.author}, ${commit.age}
        (${shaWithUrlMd(url, commit.sha, args.commitHashLength)})`
-    ).replaceAll('\n', '') + '\n'
+    ).replace(/[\n\r]/g, '') + '\n'
   } else {
     return stripIndent(`\
       &emsp;__Area__: ${capitalizeEachWord(commit.type.subtitle) || 'General'}</br>
