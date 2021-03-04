@@ -34,14 +34,6 @@ const msg = (msg, status) => {
     process.exit(status)
 }
 
-const cd = dir => {
-  try {
-    process.chdir(dir)
-  } catch (e) {
-    msg(e, EXIT.OPT)
-  }
-}
-
 const runCmd = (cmd, exit = EXIT.SYS) => {
   try {
     return cp.execSync(cmd).toString().trim()
@@ -128,14 +120,14 @@ const sortCommitsByType = (types, commits) => {
 }
 
 const processRepo = (dir, args, regexes) => {
-  cd(dir)
-  runCmd('git rev-parse --is-inside-work-tree &>/dev/null', EXIT.GIT)
-  const url = runCmd(`git config --get remote.${args.remote}.url`, EXIT.GIT)
+  const gitCmd = `git --git-dir=${dir}/.git`
+  runCmd(`${gitCmd} rev-parse --is-inside-work-tree &>/dev/null`, EXIT.GIT)
+  const url = runCmd(`${gitCmd} config --get remote.${args.remote}.url`, EXIT.GIT)
     .replace(/(ssh:\/\/)?[^@]*@([^:]*)(:[0-9]*\/|:)(.*)$/, "https://$2/$4")
   const repoName = capitalizeEachWord(url.replace(/.*\/([^\.]*).*$/, '$1'))
   const commits = sortCommitsByType(
     args.types,
-    runCmd(`git log --since='${args.age} days ago' --pretty=format:'${FMT}'`)
+    runCmd(`${gitCmd} log --since='${args.age} days ago' --pretty=format:'${FMT}'`)
       .split('\n')
       .filter(l => filterLinesByPatterns(l, regexes))
       .map(l => parseLine(l, args.ignoreErrors))

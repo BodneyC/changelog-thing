@@ -1,6 +1,6 @@
-<!-- markdownlint-disable MD013 -->
-
 # Changelog Thing
+
+<!-- markdownlint-disable MD013 -->
 
 Similar to [conventional-changelog-cli](https://www.npmjs.com/package/conventional-changelog-cli) but collecting commits from a particular number of days ago till now.
 
@@ -53,7 +53,7 @@ MD written to $PWD/out.md
 # Edit 'out.md' and add some nice summaries
 # Now, convert the updated MD to HTML
 
-`$ changelog-thing --inform md --input out.md --outform html
+$ changelog-thing --inform md --input out.md --outform html
 HTML written to $PWD/out.html
 ```
 
