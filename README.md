@@ -23,6 +23,8 @@ This is a cobbled together solution which can generate one report for multiple p
 | `remote`, `r`               | `origin`            | Specifies default name for remote                                                    | `-r my-remote`        |
 | `config`, `c`               | `null`              | Specifies the location of the config file (generated with `-w`)                      | `-c ./config.json`    |
 | `summaries`, `s`            | `false`             | Specifies if "Summaries" sections should be added per repo                           | `-s`                  |
+| `default-config`, `dc`      | `false`             | Apply the default config file                                                        | `--dc`                |
+| `commit-hash-length`, `chl` | `7`                 | Sets the commit hash length for the output                                           | `--chl`               |
 | `ignore-errors`, `ign`      | `false`             | Specified if the git output parser should ignore invalid commit lines                | `--ign`               |
 | `write-html`, `html`        | `false`             | Should the program output HTML regardless of `--outform`                             | `--html`              |
 | `write-json`, `json`        | `false`             | Should the program output JSON regardless of `--outform`                             | `--json`              |
@@ -57,4 +59,4 @@ $ changelog-thing --inform md --input out.md --outform html
 HTML written to $PWD/out.html
 ```
 
-<!-- vim: set conceallevel=0 : -->
+<!-- vim: set conceallevel=0: -->
