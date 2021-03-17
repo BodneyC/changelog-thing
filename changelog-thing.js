@@ -5,7 +5,8 @@ const fs = require('fs')
 const path = require('path')
 
 const DEFAULT_CONFIG_FILE = `${process.env.HOME}/.config/changelog-thing.config.json`
-const FMT = '%an|%d|%s|%cr|%H'
+const DELIM = '::@::'
+const FMT = `%an${DELIM}%d${DELIM}%s${DELIM}%cr${DELIM}%H`
 const PARTS = (FMT.match(/%/g) || []).length
 const IO_FORMS = {
   MD: ['md', 'markdown'],
@@ -73,7 +74,7 @@ const shaWithUrlMd = (url, sha, commitHashLength) =>
 // ------------------ Parse from Git
 
 const parseLine = (line, ignoreErrors) => {
-  parts = line.split('|')
+  parts = line.split(DELIM)
   if (parts.length != PARTS)
     msg(`Invalid line: ${line}`, ignoreErrors ? EXIT.GIT : null)
   var message = parts[2]
@@ -367,11 +368,13 @@ const main = _args => {
   const args = processArgs(_args, readConfigFile(_args))
   if (_args['write-default-config']) writeDefaultConfig(args)
 
-  var reposInfo
-  if (args.inform && args.inform == IO_FORMS.JSON)
-    reposInfo = JSON.parse(fs.readFileSync(args.input))
-  else
+  var reposInfo = {}
+  if (args.inform) {
+    if (args.inform == IO_FORMS.JSON)
+      reposInfo = JSON.parse(fs.readFileSync(args.input))
+  } else {
     reposInfo = processRepos(args, args.filterPatterns.map(p => new RegExp(p)))
+  }
 
   if (args.outform == IO_FORMS.JSON || args.writeJson) {
     const outFn = writeReposAsJson(args.output, reposInfo, false)
@@ -379,7 +382,11 @@ const main = _args => {
       (args.outform != IO_FORMS.JSON && args.writeJson) ? null : EXIT.SUC)
   }
 
-  const outMdFn = writeMdReport(args.output, reposToMd(reposInfo, args))
+  var outMdFn
+  if (args.inform == IO_FORMS.MD)
+    outMdFn = changeExtension(args.input, 'md')
+  else
+    outMdFn = writeMdReport(args.output, reposToMd(reposInfo, args))
   if (args.outform == IO_FORMS.MD)
     msg(`MD written to ${outMdFn}`, args.writeHtml ? null : EXIT.SUC)
 
