@@ -10,28 +10,28 @@ This is a cobbled together solution which can generate one report for multiple p
 
 ## Usage
 
-| Option                      | Default             | Description                                                                          | Example               |
-| ---                         | ---                 | ---                                                                                  | ---                   |
+| Option                      | Default             | Description                                                                          | Example |
+| ---                         | ---                 | ---                                                                                  | ---   |
 | `help`, `h`                 | `false`             | Show cli help information                                                            | `-h`                  |
-| `dir`, `d`                  | `['.']`             | Specify one or more directories to generate reports for                              | `-d repo-1 -d repo-2` |
-| `age`, `a`                  | `14`                | Gather commits from _n_ days ago                                                     | `-a 14`               |
-| `input`, `i`, `in`          | `null`              | Input file for use only when converting a report from a previous run of this program | `-i report.json`      |
-| `inform`, `ifrm`            | `null`              | Input file format for `--input`                                                      | `--infrm json`        |
-| `output`, `o`, `out`        | `out.md`            | Output filename, the extension will change depending on the                          | `-o report.html`      |
-| `outform`, `ofrm`           | `IO_FORMS.MD`       | Output file format for `--output`                                                    | `--ofrm html`         |
-| `beautify`,                 | `false`             | Specifies whether to beautify the output HTML (if applicable)                        | `--beautify`          |
-| `remote`, `r`               | `origin`            | Specifies default name for remote                                                    | `-r my-remote`        |
-| `config`, `c`               | `null`              | Specifies the location of the config file (generated with `-w`)                      | `-c ./config.json`    |
-| `summaries`, `s`            | `false`             | Specifies if "Summaries" sections should be added per repo                           | `-s`                  |
-| `default-config`, `dc`      | `false`             | Apply the default config file                                                        | `--dc`                |
-| `commit-hash-length`, `chl` | `7`                 | Sets the commit hash length for the output                                           | `--chl`               |
-| `ignore-errors`, `ign`      | `false`             | Specified if the git output parser should ignore invalid commit lines                | `--ign`               |
-| `write-html`, `html`        | `false`             | Should the program output HTML regardless of `--outform`                             | `--html`              |
-| `write-json`, `json`        | `false`             | Should the program output JSON regardless of `--outform`                             | `--json`              |
-| `doc-title`, `t`, `title`   | `Organization name` | Document title for multi-repo reports                                                | `-t 'My title'`       |
-| `long-commits`, `l`         | `false`             | Should the output contain single line or multi-line commits                          | -l                    |
-| `filter-patterns`, `p`      |                     | Specify one or more pattern by which to filter (remove) commits from the report      | `-p '*jenkins*'`      |
-| `write-default-config`, `w` | `false`             | Apply the changes in the CLI options and write to the default config file            | `-w`                  |
+| `dir`, `d`                  | `['.']`             | Specify one or more directories to generate reports for                              | `-d repo-1 -d repo-2`                                       |
+| `age`, `a`                  | `14`                | Gather commits from _n_ days ago                                                     | `-a 14`                              |
+| `input`, `i`, `in`          | `null`              | Input file for use only when converting a report from a previous run of this program | `-i report.json`                                              |
+| `inform`, `ifrm`            | `null`              | Input file format for `--input`                                                      | `--infrm json`                   |
+| `output`, `o`, `out`        | `out.md`            | Output filename, the extension will change depending on the                          | `-o report.html`                                             |
+| `outform`, `ofrm`           | `IO_FORMS.MD`       | Output file format for `--output`                                                    | `--ofrm html`                     |
+| `beautify`,                 | `false`             | Specifies whether to beautify the output HTML (if applicable)                        | `--beautify`                                              |
+| `remote`, `r`               | `origin`            | Specifies default name for remote                                                    | `-r my-remote`                     |
+| `config`, `c`               | `null`              | Specifies the location of the config file (generated with `-w`)                      | `-c ./config.json`                                           |
+| `summaries`, `s`            | `false`             | Specifies if "Summaries" sections should be added per repo                           | `-s`                                                          |
+| `default-config`, `dc`      | `false`             | Apply the default config file                                                        | `--dc`                           |
+| `commit-hash-length`, `chl` | `7`                 | Sets the commit hash length for the output                                           | `--chl`                                     |
+| `ignore-errors`, `ign`      | `false`             | Specified if the git output parser should ignore invalid commit lines                | `--ign`                                                  |
+| `write-html`, `html`        | `false`             | Should the program output HTML regardless of `--outform`                             | `--html`                                                |
+| `write-json`, `json`        | `false`             | Should the program output JSON regardless of `--outform`                             | `--json`                                                |
+| `doc-title`, `t`, `title`   | `Organization name` | Document title for multi-repo reports                                                | `-t 'My title'`                       |
+| `long-commits`, `l`         | `false`             | Should the output contain single line or multi-line commits                          | `-l`                                                        |
+| `filter-patterns`, `p`      | `[]`                | Specify one or more pattern by which to filter (remove) commits from the report      | `-p '*jenkins*'`                                       |
+| `write-default-config`, `w` | `false`             | Apply the changes in the CLI options and write to the default config file            | `-w`                                                          |
 
 ## Examples
 
@@ -55,7 +55,7 @@ MD written to $PWD/out.md
 # Edit 'out.md' and add some nice summaries
 # Now, convert the updated MD to HTML
 
-$ changelog-thing --inform md --input out.md --outform html
+$ changelog-thing --inform md --input out.md
 HTML written to $PWD/out.html
 ```
 

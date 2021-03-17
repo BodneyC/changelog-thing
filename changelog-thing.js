@@ -121,18 +121,22 @@ const sortCommitsByType = (types, commits) => {
 }
 
 const processRepo = (dir, args, regexes) => {
+  msg(`Processing directory: ${dir}`)
   const gitCmd = `git --git-dir=${dir}/.git`
   runCmd(`${gitCmd} rev-parse --is-inside-work-tree &>/dev/null`, EXIT.GIT)
   const url = runCmd(`${gitCmd} config --get remote.${args.remote}.url`, EXIT.GIT)
     .replace(/(ssh:\/\/)?[^@]*@([^:]*)(:[0-9]*\/|:)(.*)$/, "https://$2/$4")
   const repoName = capitalizeEachWord(url.replace(/.*\/([^\.]*).*$/, '$1'))
-  const commits = sortCommitsByType(
-    args.types,
-    runCmd(`${gitCmd} log --since='${args.age} days ago' --pretty=format:'${FMT}'`)
-      .split('\n')
-      .filter(l => filterLinesByPatterns(l, regexes))
-      .map(l => parseLine(l, args.ignoreErrors))
-  )
+  const gitLog = runCmd(
+    `${gitCmd} log --since='${args.age} days ago' --pretty=format:'${FMT}'`
+  ).split('\n')
+  msg(`  ${gitLog.length} commits found`)
+  var commits = gitLog
+    .filter(l => l !== '' && filterLinesByPatterns(l, regexes))
+    .map(l => parseLine(l, args.ignoreErrors))
+  if (gitLog.length !== commits.length)
+    msg(`  ${gitLog.length - commits.length} commits filtered`)
+  commits = sortCommitsByType(args.types, commits)
   return {
     url: url,
     repo: repoName,
@@ -370,8 +374,10 @@ const main = _args => {
 
   var reposInfo = {}
   if (args.inform) {
-    if (args.inform == IO_FORMS.JSON)
+    if (args.inform == IO_FORMS.JSON) {
+      msg(`Reading JSON from ${args.inform}`)
       reposInfo = JSON.parse(fs.readFileSync(args.input))
+    }
   } else {
     reposInfo = processRepos(args, args.filterPatterns.map(p => new RegExp(p)))
   }
@@ -382,16 +388,19 @@ const main = _args => {
       (args.outform != IO_FORMS.JSON && args.writeJson) ? null : EXIT.SUC)
   }
 
-  var outMdFn
-  if (args.inform == IO_FORMS.MD)
-    outMdFn = changeExtension(args.input, 'md')
-  else
-    outMdFn = writeMdReport(args.output, reposToMd(reposInfo, args))
+  var mdFn
+  if (args.inform == IO_FORMS.MD) {
+    mdFn = changeExtension(args.input, 'md')
+    msg(`Using input markdown file: ${mdFn}`)
+    args.outform = IO_FORMS.HTML
+  } else {
+    mdFn = writeMdReport(args.output, reposToMd(reposInfo, args))
+  }
   if (args.outform == IO_FORMS.MD)
-    msg(`MD written to ${outMdFn}`, args.writeHtml ? null : EXIT.SUC)
+    msg(`MD written to ${mdFn}`, args.writeHtml ? null : EXIT.SUC)
 
   if (args.outform == IO_FORMS.HTML || args.writeHtml) {
-    const outFn = convertMdFileToHtml(args, outMdFn)
+    const outFn = convertMdFileToHtml(args, mdFn)
     msg(`HTML written to ${outFn}`)
   }
 }
