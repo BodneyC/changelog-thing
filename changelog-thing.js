@@ -354,6 +354,7 @@ const processArgs = (args, conf) => {
       test: 'Testing',
       chore: 'Chores',
       misc: 'Misc.',
+      ci: 'Pipeline Changes',
     },
   }
 }
