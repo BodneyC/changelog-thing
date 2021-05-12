@@ -359,6 +359,8 @@ const processArgs = (args, conf) => {
 }
 
 const readConfigFile = args => {
+  if (args['default-config'])
+    args.config = DEFAULT_CONFIG_FILE
   if (!args.config)
     return {}
   try {
