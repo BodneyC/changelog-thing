@@ -1,8 +1,12 @@
 {
   "name": "@bodneyc/changelog-thing",
-  "version": "1.0.12",
+  "version": "1.1.0",
   "main": "changelog-thing.js",
   "license": "MIT",
+  "scripts": {
+    "lint": "eslint *.js",
+    "lint:fix": "eslint --fix *.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/BodneyC/changelog-thing.git"
@@ -10,9 +14,13 @@
   "dependencies": {
     "@bodneyc/mdtohtml": "^1.0.3",
     "kleur": "^4.1.4",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "tmp": "^0.2.1"
   },
   "bin": {
     "changelog-thing": "./changelog-thing.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0"
   }
 }
